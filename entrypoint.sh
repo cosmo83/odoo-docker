@@ -10,6 +10,8 @@ function check_config() {
     DB_ARGS+=("--${param}")
     DB_ARGS+=("${value}")
 }
+echo $HOST
+
 check_config "db_host" "$HOST"
 check_config "db_port" "$DBPORT"
 check_config "db_user" "$USER"
@@ -23,7 +25,7 @@ case "$1" in
             exec odoo "$@"
         else
             wait-for-psql.py ${DB_ARGS[@]} --timeout=30
-            exec odoo "$@" "${DB_ARGS[@]}"
+            exec odoo "$@" "${DB_ARGS[@]}" -i base
         fi
         ;;
     -*)
