@@ -74,7 +74,7 @@ RUN chown odoo /etc/odoo/odoo.conf \
 VOLUME ["/var/lib/odoo", "/mnt/extra-addons"]
 
 # Expose Odoo services
-EXPOSE 8069 8071 8072
+EXPOSE 8069
 
 # Set the default config file
 ENV ODOO_RC /etc/odoo/odoo.conf
