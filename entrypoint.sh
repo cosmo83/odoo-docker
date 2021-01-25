@@ -24,7 +24,7 @@ check_config "db_host" "$HOST"
 check_config "db_port" "$DBPORT"
 check_config "db_user" "$USER"
 check_config "db_password" "$PASSWORD"
-check_config "db_name" "$DBNAME"
+check_config "database" "$DBNAME"
 
 case "$1" in
     -- | odoo)
