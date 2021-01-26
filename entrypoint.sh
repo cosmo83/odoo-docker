@@ -29,10 +29,10 @@ case "$1" in
             if [[ $(PGPASSWORD="$PASSWORD" psql -h "$HOST" -U $USER -d $DBNAME -c "$SQL_EXISTS") ]]
             then
               echo "ODOO Table exists"
-              exec odoo "$@" "${DB_ARGS[@]}"
+              exec odoo "$@" "${DB_ARGS[@]}" --no-database-list
             else
               wait-for-psql.py ${DB_ARGS[@]} --timeout=30
-              exec odoo "$@" "${DB_ARGS[@]}" -i base
+              exec odoo "$@" "${DB_ARGS[@]}" -i base --no-database-list
             fi
         fi
         ;;
