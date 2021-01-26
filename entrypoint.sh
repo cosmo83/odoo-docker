@@ -32,7 +32,7 @@ case "$1" in
         else
             TABLE=res_company
             SQL_EXISTS=$(printf '\dt "%s"' "$TABLE")
-            if [[ $(PGPASSWORD="$DBPASS" psql -h "$DBHOST" -U $DBUSER -d $DBNAME -c "$SQL_EXISTS") ]]
+            if [[ $(PGPASSWORD="$DBPASS" psql -h $DBHOST -U $DBUSER -d $DBNAME -c "$SQL_EXISTS") ]]
             then
               echo "ODOO Table exists"
               exec odoo "$@" "${DB_ARGS[@]}" --no-database-list
