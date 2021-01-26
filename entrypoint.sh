@@ -24,8 +24,16 @@ case "$1" in
         if [[ "$1" == "scaffold" ]] ; then
             exec odoo "$@"
         else
-            wait-for-psql.py ${DB_ARGS[@]} --timeout=30
-            exec odoo "$@" "${DB_ARGS[@]}" -i base
+            TABLE=uom_category
+            SQL_EXISTS=$(printf '\dt "%s"' "$TABLE")
+            if [[ $(PGPASSWORD="$PASSWORD" psql -h "$HOST" -U $USER -d $DBNAME -c "$SQL_EXISTS") ]]
+            then
+              echo "ODOO Table exists"
+              exec odoo "$@" "${DB_ARGS[@]}"
+            else
+              wait-for-psql.py ${DB_ARGS[@]} --timeout=30
+              exec odoo "$@" "${DB_ARGS[@]}" -i base
+            fi
         fi
         ;;
     -*)
