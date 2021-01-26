@@ -24,7 +24,7 @@ case "$1" in
         if [[ "$1" == "scaffold" ]] ; then
             exec odoo "$@"
         else
-            TABLE=uom_category
+            TABLE=res_company
             SQL_EXISTS=$(printf '\dt "%s"' "$TABLE")
             if [[ $(PGPASSWORD="$PASSWORD" psql -h "$HOST" -U $USER -d $DBNAME -c "$SQL_EXISTS") ]]
             then
