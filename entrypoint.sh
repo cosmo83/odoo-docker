@@ -12,11 +12,11 @@ function check_config() {
 }
 
 
-DBHOST=`echo $VCAP_SERVICES | jq '.postgresql[0].credentials.host'`
-DBPORT=`echo $VCAP_SERVICES | jq '.postgresql[0].credentials.port'`
-DBUSER=`echo $VCAP_SERVICES | jq '.postgresql[0].credentials.username'`
-DBPASS=`echo $VCAP_SERVICES | jq '.postgresql[0].credentials.password'`
-DBNAME=`echo $VCAP_SERVICES | jq '.postgresql[0].credentials.database'`
+DBHOST=`echo $VCAP_SERVICES | jq -r '.postgresql[0].credentials.host'`
+DBPORT=`echo $VCAP_SERVICES | jq -r '.postgresql[0].credentials.port'`
+DBUSER=`echo $VCAP_SERVICES | jq -r '.postgresql[0].credentials.username'`
+DBPASS=`echo $VCAP_SERVICES | jq -r '.postgresql[0].credentials.password'`
+DBNAME=`echo $VCAP_SERVICES | jq -r '.postgresql[0].credentials.database'`
 
 check_config "db_host" "$DBHOST"
 check_config "db_port" "$DBPORT"
@@ -32,7 +32,7 @@ case "$1" in
         else
             TABLE=res_company
             SQL_EXISTS=$(printf '\dt "%s"' "$TABLE")
-            if [[ $(PGPASSWORD="$DBPASS" psql -h $DBHOST -U $DBUSER -d $DBNAME -c "$SQL_EXISTS") ]]
+            if [[ $(PGPASSWORD="$DBPASS" psql -h "$DBHOST" -U $DBUSER -d $DBNAME -c "$SQL_EXISTS") ]]
             then
               echo "ODOO Table exists"
               exec odoo "$@" "${DB_ARGS[@]}" --no-database-list
