@@ -10,12 +10,18 @@ function check_config() {
     DB_ARGS+=("--${param}")
     DB_ARGS+=("${value}")
 }
-echo $HOST
 
-check_config "db_host" "$HOST"
+
+DBHOST=`echo $VCAP_SERVICES | jq '.postgresql[0].credentials.host'`
+DBPORT=`echo $VCAP_SERVICES | jq '.postgresql[0].credentials.port'`
+DBUSER=`echo $VCAP_SERVICES | jq '.postgresql[0].credentials.username'`
+DBPASS=`echo $VCAP_SERVICES | jq '.postgresql[0].credentials.password'`
+DBNAME=`echo $VCAP_SERVICES | jq '.postgresql[0].credentials.database'`
+
+check_config "db_host" "$DBHOST"
 check_config "db_port" "$DBPORT"
-check_config "db_user" "$USER"
-check_config "db_password" "$PASSWORD"
+check_config "db_user" "$DBUSER"
+check_config "db_password" "$DBPASS"
 check_config "database" "$DBNAME"
 
 case "$1" in
@@ -26,7 +32,7 @@ case "$1" in
         else
             TABLE=res_company
             SQL_EXISTS=$(printf '\dt "%s"' "$TABLE")
-            if [[ $(PGPASSWORD="$PASSWORD" psql -h "$HOST" -U $USER -d $DBNAME -c "$SQL_EXISTS") ]]
+            if [[ $(PGPASSWORD="$DBPASS" psql -h "$DBHOST" -U $DBUSER -d $DBNAME -c "$SQL_EXISTS") ]]
             then
               echo "ODOO Table exists"
               exec odoo "$@" "${DB_ARGS[@]}" --no-database-list
