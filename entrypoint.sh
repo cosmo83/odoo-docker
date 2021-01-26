@@ -38,7 +38,7 @@ case "$1" in
               exec odoo "$@" "${DB_ARGS[@]}" --no-database-list
             else
               wait-for-psql.py ${DB_ARGS[@]} --timeout=30
-              exec odoo "$@" "${DB_ARGS[@]}" -i base --no-database-list
+              exec odoo "$@" "${DB_ARGS[@]}" -i base --without-demo=base --no-database-list 
             fi
         fi
         ;;
